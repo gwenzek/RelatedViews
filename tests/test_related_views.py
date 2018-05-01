@@ -36,6 +36,8 @@ class TestRelatedViews(unittest.TestCase):
       "cells": [[0, 0, 1, 1], [1, 0, 2, 1]]
     })
     self.opened_views = []
+
+    os.makedirs(PREFIX, exist_ok=True)
     touch(FILE_A, FILE_A_TEST)
     touch(FILE_B, FILE_B_TEST, FILE_B_DOC)
     touch(FILE_C, FILE_C_TEST)
