@@ -44,9 +44,6 @@ class MarkAsRelatedCommand(sublime_plugin.TextCommand):
 class MainFileChangeListener(sublime_plugin.EventListener):
   running = False
 
-  # def on_activated(self, view):
-  #   self.maybe_update(view)
-
   def on_activated(self, view):
     self.maybe_update(view)
 
@@ -81,6 +78,9 @@ def keep_focus_in_place(window):
 class UpdateRelatedViewsCommand(sublime_plugin.TextCommand):
   def run(self, edit):
     main_view = self.view
+    if not main_view.file_name():
+      return
+
     window = main_view.window()
     if not window:
       return
@@ -101,14 +101,13 @@ class UpdateRelatedViewsCommand(sublime_plugin.TextCommand):
         elif reason == STILL_RELATED:
           already_opened.add(v.file_name())
 
-      # Closing windows in RELATED_GROUP.
+      # Opening related files in the RELATED_GROUP.
       for i, r in enumerate(related[::-1]):
         if r in already_opened:
           continue
         log("Opening", r)
         v = window.open_file(r)
-        window.set_view_index(v, RELATED_GROUP, i)
-        log("obu:= True for", v, v.file_name())
+        window.set_view_index(v, RELATED_GROUP, 0)
         v.settings().set("opened_because_related", True)
 
 
@@ -118,6 +117,7 @@ IS_DIRTY = 2;
 NOT_OPENED_BY_US = 3;
 
 def should_close(view, related_files):
+  """Returns whether we should close a given view, and the reason why."""
   if view.file_name() in related_files:
     return False, STILL_RELATED
   if view.is_dirty():
