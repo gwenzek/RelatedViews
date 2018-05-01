@@ -43,7 +43,7 @@ class TestRelatedViews(unittest.TestCase):
     touch(FILE_C, FILE_C_TEST)
 
   def setUp(self):
-    project_data = self.window.project_data()
+    project_data = self.window.project_data() or {}
     project_data["related_views"] = [
         { "file": FILE_A, "related": [FILE_A_TEST] },
         { "file": FILE_B, "related": [FILE_B_TEST, FILE_B_DOC] },

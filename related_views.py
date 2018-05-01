@@ -27,7 +27,7 @@ class MarkAsRelatedCommand(sublime_plugin.TextCommand):
 
     main_file = check(main_view.file_name(), "Main view have no file associated")
 
-    project_data = window.project_data()
+    project_data = window.project_data() or {}
     related_views = project_data.get("related_views", [])
     found = False
 
@@ -134,7 +134,7 @@ def get_related(main_view):
   main_file = check(
       main_view.file_name(), "Main view has no file associated")
 
-  project_data = main_view.window().project_data()
+  project_data = main_view.window().project_data() or {}
   relations = project_data.get("related_views", [])
 
   for r in relations:
